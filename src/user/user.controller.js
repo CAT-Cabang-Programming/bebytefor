@@ -52,7 +52,7 @@ router.post("/login", async (req, res) => {
     const user = await getUserByName(username);
     if (!user) return res.status(404).send({ message: "User not found" });
 
-    const validPassword = await bcrypt(password, user.password);
+    const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword)
       return res.status(401).send({ message: "Invalid Password" });
 
@@ -130,7 +130,7 @@ router.patch("/update/:id", authenticate, async (req, res) => {
       message: "Update success",
     });
   } catch (error) {
-    res.send(500).send({ message: `Error: ${error.message}` });
+    res.status(500).send({ message: `Error: ${error.message}` });
   }
 });
 

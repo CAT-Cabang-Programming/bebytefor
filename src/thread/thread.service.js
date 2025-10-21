@@ -17,7 +17,7 @@ export const getThreadById = async (threadId) => {
 };
 
 export const getThreadBySlugId = async (slugId) => {
-  const thread = findThreadBySlugId(slugId);
+  const thread = await findThreadBySlugId(slugId);
   return thread;
 };
 
