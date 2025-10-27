@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminal CLI</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>�</text></svg>">
+</head>
+<body>
+    <div class="terminal">
+        <div class="terminal-header">
+            <div class="terminal-buttons">
+                <span class="close"></span>
+                <span class="minimize"></span>
+                <span class="maximize"></span>
+            </div>
+            <div class="terminal-title">Terminal CLI</div>
+        </div>
+        
+        <div class="terminal-body">
+            <div class="output" id="output">
+                <div class="system-info">
+                    <pre>
+████████╗███████╗██████╗ ██╗     ██╗███╗   ██╗ █████╗ ██╗     
+╚══██╔══╝██╔════╝██╔══██╗████╗ ████║██║████╗  ██║██╔══██╗██║     
+   ██║   █████╗  ██████╔╝██╔████╔██║██║██╔██╗ ██║███████║██║     
+   ██║   ██╔══╝  ██╔══██╗██║╚██╔╝██║██║██║╚██╗██║██╔══██║██║     
+   ██║   ███████╗██║  ██║██║ ╚═╝ ██║██║██║ ╚████║██║  ██║███████╗
+   ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝
+                    </pre>
+                    <div class="welcome-text">
+                        <p>Welcome to Terminal CLI Template</p>
+                        <p>Type /help to see available commands</p>
+                        <p>Keyboard shortcuts: Ctrl+L (clear), Ctrl+C (clear input)</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="scroll-indicator" id="scrollIndicator">↓ New messages below ↓</div>
+            
+            <div class="input-line">
+                <span class="prompt">$ </span>
+                <input type="text" id="input" autocomplete="off" spellcheck="false" autofocus>
+                <span class="cursor">_</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
