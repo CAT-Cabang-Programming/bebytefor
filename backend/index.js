@@ -15,6 +15,6 @@ app.use("/threads", threadController);
 app.use("/users", userController);
 app.use("/comments", commentController);
 
-app.listen(3000, () => {
-  console.log("App is running on port 3000");
+app.listen(3001, () => {
+  console.log("App is running on port 3001");
 });

@@ -1,13 +1,17 @@
 const output = document.getElementById('output');
 const input = document.getElementById('input');
 const cursor = document.querySelector('.cursor');
-const scrollIndicator = document.getElementById('scrollIndicator');
+const scrollIndicator = document.getElementById('scrollIndicator'); 
+
+
 
 let isProcessing = false;
 let isUserScrolling = false;
 let scrollTimeout = null;
 
-input.focus();
+if (!document.activeElement || document.activeElement === document.body) {
+    input.focus();
+}
 
 output.addEventListener('scroll', () => {
     const { scrollTop, scrollHeight, clientHeight } = output;
@@ -42,8 +46,10 @@ input.addEventListener('keydown', (e) => {
     }
 });
 
-document.addEventListener('click', () => {
-    input.focus();
+document.addEventListener('click', (e) => {
+    if (e.target === document.body || e.target === document.documentElement) {
+        input.focus();
+    }
 });
 
 function handleCommand(command) {
@@ -61,15 +67,54 @@ function sendCommand(command) {
     
     isProcessing = true;
     cursor.style.display = 'none';
+
+    const [cmd, ...args] = command.split(' ');
     
-    fetch('/api/command', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ command })
-    })
-    .then(response => response.json())
+    let fetchPromise;
+    switch(cmd) {
+        case '/login':
+            fetchPromise = fetch('/api/users/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: args[0], password: args[1] })
+            });
+            break;
+        case '/register':
+            fetchPromise = fetch('/api/users/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: args[0], password: args[1] })
+            });
+            break;
+        case '/thread':
+            if (args[0] === 'create') {
+                fetchPromise = fetch('/api/threads', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ content: args.slice(1).join(' ') })
+                });
+            } else if (args[0] === 'list') {
+                fetchPromise = fetch('/api/threads');
+            }
+            break;
+        case '/comment':
+            if (args[0] === 'create') {
+                fetchPromise = fetch('/api/comments', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ threadId: args[1], content: args.slice(2).join(' ') })
+                });
+            }
+            break;
+        default:
+            fetchPromise = fetch('/api/command', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ command })
+            });
+    }
+
+    fetchPromise.then(response => response.json())
     .then(data => {
         if (data.type === 'clear') {
             clearOutput();
@@ -81,7 +126,9 @@ function sendCommand(command) {
         
         isProcessing = false;
         cursor.style.display = 'inline';
-        input.focus();
+        if (!document.activeElement || document.activeElement === document.body) {
+            input.focus();
+        }
         smoothScrollToBottom();
     })
     .catch(error => {
